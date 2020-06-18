@@ -3,6 +3,10 @@ Ubuntu 18.04 with Docker CE and testing tools installed
 
 ```shell
 packer build -force -on-error=ask packer.json
+
+vagrant-tools # Select "Publish a box to Vagrant Cloud"
+
+rm -rf output/
 ```
 
 Debug
