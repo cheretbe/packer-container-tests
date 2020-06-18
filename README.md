@@ -5,20 +5,7 @@ Ubuntu 18.04 with Docker CE and testing tools installed
 packer build -force -on-error=ask packer.json
 ```
 
-Debug (:warning: make sure to run `vagrant destroy` afterwards, so that "source"
-VM is not left hanging)
-```shell
-packer build -force -on-error=ask \
-  -var "skip_package=true" -var "teardown_method=suspend" \
-  packer.json
-cd output-docker-tests/
-vagrant resume source
-vagrant ssh source
-# Make sure to destroy the temporary Vagrant environment
-vagrant destroy -f
-cd 
-```
-
+Debug
 ```shell
 vagrant box add -f docker-tests-2del ./output/package.box
 ```

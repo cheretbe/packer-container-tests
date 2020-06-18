@@ -1,19 +1,12 @@
 {
-  "variables": {
-    "skip_package": "false",
-    "teardown_method": "halt"
-  },
   "builders": [
     {
       "name": "docker-tests",
       "communicator": "ssh",
       "source_path": "ubuntu/bionic64",
-      "box_name": "cheretbe/docker-tests",
       "provider": "virtualbox",
       "type": "vagrant",
       "output_dir": "output",
-      "skip_package": "{{user `skip_package`}}",
-      "teardown_method": "{{user `teardown_method`}}",
       "output_vagrantfile": "vagrantfile.template"
     }
   ],
