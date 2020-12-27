@@ -31,5 +31,5 @@
       pip:
         name: ["packaging", "requests", "invoke", "pytest", "PyInquirer",
                "molecule[docker]", "docker", "ansible-lint", "flake8",
-               "testinfra"]
+               "pytest-testinfra"]
         executable: pip3
