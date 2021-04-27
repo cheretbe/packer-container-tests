@@ -13,16 +13,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "./provision/install_ansible.sh"
-    },
-    {
-      "type": "ansible-local",
-      "playbook_file": "./provision/provision.yml",
-      "extra_arguments": ["--extra-vars \"ansible_python_interpreter=/usr/bin/python3\""]
-    },
-    {
-      "type": "shell",
-      "inline": "sudo apt-get clean"
+      "script": "./provision/provision.sh"
     }
   ]
 }
