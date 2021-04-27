@@ -1,5 +1,5 @@
 # packer-container-tests
-Ubuntu 18.04 with Docker CE, LXD and testing tools installed
+Ubuntu 20.04 with Docker CE, LXD and testing tools installed
 
 ```shell
 packer build -force -on-error=ask packer.json
