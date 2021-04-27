@@ -1,7 +1,7 @@
 {
   "builders": [
     {
-      "name": "docker-tests",
+      "name": "container-tests",
       "communicator": "ssh",
       "source_path": "ubuntu/focal64",
       "provider": "virtualbox",

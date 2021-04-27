@@ -25,7 +25,8 @@ python3 -m pip install --disable-pip-version-check pip==21.0.1
 
 echo "Installing packages using pip3"
 pip3 --disable-pip-version-check install ansible packaging requests invoke \
-  pytest "molecule[docker]" docker ansible-lint flake8 pytest-testinfra
+  pytest "molecule[docker]" docker ansible-lint flake8 pytest-testinfra \
+  molecule-lxd
 
 echo "Checking out shared playbooks repo"
 if [ -d ansible-playbooks ]; then rm -rf ansible-playbooks; fi
@@ -45,3 +46,12 @@ rm -rf ansible-playbooks
 
 echo "Cleaning up apt cache"
 apt-get clean
+
+echo "Installing LXD"
+if ! sudo snap list | grep 'lxd'
+then
+  snap install lxd
+fi
+
+echo "Adding 'vagrant' user to 'lxd' group"
+usermod -a -G lxd vagrant
