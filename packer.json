@@ -15,5 +15,11 @@
       "type": "shell",
       "script": "./provision/provision.sh"
     }
+  ],
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "inline": ["mv output/package.box output/container-tests.box"]
+    }
   ]
 }
