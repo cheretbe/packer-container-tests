@@ -1,3 +1,34 @@
+$btrfs_hdd_name = "btrfs_hdd.vdi"
+
+# TODO: replace this with disk options whe this feature stops being experimental
+# https://www.vagrantup.com/docs/disks/virtualbox/usage
+class VagrantPlugins::ProviderVirtualBox::Action::SetName
+  alias_method :original_call, :call
+  def call(env)
+    driver = env[:machine].provider.driver
+    vm_path = ""
+    driver.execute("showvminfo", driver.uuid, "--machinereadable").split("\n").each do |info_line|
+      info_name, info_value = info_line.split("=", 2)
+      if info_name == "CfgFile" then
+        vm_path = File.dirname(info_value.gsub('"', ""))
+      end
+    end
+    btrfs_hdd_path = File.join(vm_path, $btrfs_hdd_name)
+    unless File.exist?(btrfs_hdd_path)
+      env[:ui].detail("Creating virtual drive #{$btrfs_hdd_name}")
+      driver.execute("createhd", "--filename", btrfs_hdd_path, "--variant",
+        "Standard", "--size", (8*1024).to_s
+      )
+    end
+    env[:ui].detail("Attaching virtual drive #{$btrfs_hdd_name} to the VM")
+    driver.execute("storageattach", driver.uuid,  "--storagectl", "SCSI",
+      "--port", "2", "--device", "0", "--type", "hdd", "--medium", btrfs_hdd_path
+    )
+
+    original_call(env)
+  end
+end
+
 Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
@@ -5,6 +36,30 @@ Vagrant.configure("2") do |config|
     # prevent 'ubuntu-bionic-18.04-cloudimg-console.log' file creation
     # and reduce boot time
     # https://groups.google.com/forum/#!topic/vagrant-up/eZljy-bddoI
+    vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
     vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
   end
+
+  config.vm.provision "file",
+    source: File.dirname(__FILE__) + "/init_btrfs_storage.yml",
+    destination: "/vagrant/provision/init_btrfs_storage.yml"
+
+  config.vm.provision "shell",
+    name: "Call Ansible playbook init_btrfs_storage.yml",
+    keep_color: true, privileged: true,
+    inline: <<-SHELL
+      ansible-playbook /vagrant/provision/init_btrfs_storage.yml \
+        --connection=local -i localhost,
+    SHELL
+
+  config.vm.provision "shell",
+    name: "LXD config",
+    keep_color: true, privileged: true,
+    inline: <<-SHELL
+      if [ "$(lxc storage get default source 2>/dev/null)" != "/mnt/lxd" ]; then
+        echo "Initializing LXD"
+        lxd init --auto --storage-backend=btrfs --storage-pool=/mnt/lxd
+      fi
+    SHELL
+
 end

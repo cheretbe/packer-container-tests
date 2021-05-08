@@ -5,6 +5,7 @@ source "vagrant" "container-tests" {
   output_vagrantfile = "vagrantfile.template"
   provider           = "virtualbox"
   source_path        = "ubuntu/focal64"
+  package_include    = ["./provision/init_btrfs_storage.yml"]
 }
 
 build {
