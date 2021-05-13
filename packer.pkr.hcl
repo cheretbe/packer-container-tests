@@ -14,4 +14,8 @@ build {
   provisioner "shell" {
     script = "./provision/provision.sh"
   }
+
+  post-processor "shell-local" {
+    inline = ["mv output/package.box output/container-tests.box"]
+  }
 }

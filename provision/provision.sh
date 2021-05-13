@@ -9,6 +9,12 @@ if [ "$UID" != "0" ]; then
   exit
 fi
 
+# A fix for occasional "Release file is not yet valid" error
+# due to invalid time on Windows Virtualbox hosts
+timedatectl set-ntp off
+timedatectl set-ntp on
+sleep 4s
+
 # echo "Installing Ansible"
 # add-apt-repository ppa:ansible/ansible -y
 echo "Updating package cache"

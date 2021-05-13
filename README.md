@@ -8,6 +8,11 @@ vagrant-tools # Select "Publish a box to Vagrant Cloud"
 
 rm -rf output/
 ```
+```bat
+:: Windows
+
+RMDIR output /S /Q
+```
 
 Debug
 ```shell
