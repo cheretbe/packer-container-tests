@@ -42,13 +42,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "file",
     source: File.dirname(__FILE__) + "/init_btrfs_storage.yml",
-    destination: "/vagrant/provision/init_btrfs_storage.yml"
+    destination: "/home/vagrant/init_btrfs_storage.yml"
 
   config.vm.provision "shell",
     name: "Call Ansible playbook init_btrfs_storage.yml",
     keep_color: true, privileged: true,
     inline: <<-SHELL
-      ansible-playbook /vagrant/provision/init_btrfs_storage.yml \
+      ansible-playbook /home/vagrant/init_btrfs_storage.yml \
         --connection=local -i localhost,
     SHELL
 

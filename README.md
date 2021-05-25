@@ -16,7 +16,9 @@ RMDIR output /S /Q
 
 Debug
 ```shell
-vagrant box add -f packer-container-tests-2del ./output/package.box
+vagrant box add -f packer-container-tests-2del ./output/container-tests.box
+
+vagrant box remove packer-container-tests-2del
 ```
 
 ```ruby
